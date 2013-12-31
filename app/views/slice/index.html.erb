@@ -1,0 +1,58 @@
+<div id="responseContent">
+<div id="orders_chart" class="col-xs-12 col-md-7">chart</div>
+<div id="chartInfo" class="table-responsive col-md-offset-0.5 col-xs-11 col-md-4 pre-scrollable" style="float:left">
+	<table id="tableData" class="table table-condensed table-hover table-bordered " >
+		<thead><tr><th>id</th><th>Views</th><th>Uniques</th><th>Revenues</th></thead>
+			<%=raw @rowVal %>
+	</table>
+</div>
+
+<script type="text/javascript">
+	 $(function () {
+    $('#orders_chart').highcharts({
+          chart: {
+              plotBackgroundColor: null,
+              plotBorderWidth: null,
+              plotShadow: false
+          },
+      		title: {
+        		text: "Views vs Uniques"
+      		},
+      		  legend: {
+            width: 300,
+            floating: false,
+            x: 20, // = marginLeft - default spacingLeft
+            itemWidth: 70
+        },
+      		xAxis: {
+   			
+      		},
+      		yAxis: {
+        		title: {
+          		text: ""
+        		}
+      		},
+      		series: [
+      		{
+        		name: "Uniques",
+        		data: <%= raw @uniques.to_json.gsub(/\"/, "") %>
+      		},
+      		{
+        		name: "Views",
+        		data: <%= raw @views.to_json.gsub(/\"/, "") %>
+      		},
+      		{
+        		name: "Bids",
+        		data: <%= raw @bids.to_json.gsub(/\"/, "") %>
+      		},
+      		{
+        		name: "CTR",
+        		data: <%= raw @CTRs %>
+      		}
+      		]
+    	});
+    	
+    	
+    });	
+</script>
+</div>

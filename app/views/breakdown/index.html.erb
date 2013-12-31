@@ -1,0 +1,741 @@
+<head>
+   <script>	
+   
+   var a;
+ 	
+ var flag = 0;
+ 	   
+   //var checkbox = document.createElement('input');
+   function checkboxClicked() {
+       loadXMLDoc();
+   }
+   
+   function loadXMLDoc() {
+       // gets all the input tags in frm, and their number
+       var inpfields = document.getElementsByTagName('input');
+       var nr_inpfields = inpfields.length;
+   
+       var names = [];
+       var ids = [];
+       var values = [];
+       // traverse the inpfields elements, and adds the value of selected (checked) checkbox in selchbox
+       for (var i = 0; i < nr_inpfields; i++) {
+           if (inpfields[i].type == 'checkbox' && inpfields[i].checked == true) {
+               names.push(inpfields[i].name);
+               ids.push(inpfields[i].id);
+               values.push(inpfields[i].value);
+           }
+   
+       }
+       var xmlhttp;
+       if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+           xmlhttp = new XMLHttpRequest();
+       } else { // code for IE6, IE5
+           xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+       }
+       xmlhttp.onreadystatechange = function () {
+           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+               document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
+           }
+       }
+   
+   //      xmlhttp.open("GET", "/segment/index", true);
+   //        xmlhttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+      xmlhttp.open("GET","/segment/index?values="+values+"&names="+names+"&ids="+ids+"&flag="+flag,true);
+      xmlhttp.send();
+      // xmlhttp.send("values=" + encodeURIComponent(values.toString()) + "&ids=" + encodeURIComponent(ids.toString()) + "&names=" + encodeURIComponent(names.toString()));
+   //        console.log("myObject1=" + encodeURIComponent(values.toString()) + "&myObject2=" + encodeURIComponent(ids.toString()) + "&myObject3=" + encodeURIComponent(names.toString()));
+   }
+   
+   function showDiv() {
+   
+       document.getElementById('condition2').style.display = "block";
+       jQuery("#cat").select2();
+       jQuery("#item").select2();
+       jQuery("#IncExc").select2();
+       jQuery("#cat").select2({
+           placeholder: "Select Category",
+           allowClear: true
+       });
+       jQuery("#item").select2({
+           placeholder: "Select Item"
+       });
+       jQuery("#IncExc").select2({
+           placeholder: "Select Operation"
+       });
+   }
+   
+   
+   function showCondition(valCategory, valInclude, valItem) {
+   
+   
+       if (!valItem == "") {
+           document.getElementById("warning").innerHTML = "";
+           var checkbox = document.createElement('input');
+           checkbox.type = "checkbox";
+           checkbox.checked = true;
+           checkbox.name = valInclude;
+           checkbox.value = valCategory;
+           checkbox.id = valItem;
+           var label = document.createElement('label');
+           label.htmlFor = valItem;
+           if (checkbox.name == 'include') {
+               label.appendChild(document.createTextNode(" + " + valCategory + " = " + valItem));
+           } else {
+               label.appendChild(document.createTextNode(" - " + valCategory + " = " + valItem));
+           }
+           var br = document.createElement("br");
+           conditions.appendChild(br);
+           conditions.appendChild(checkbox);
+           conditions.appendChild(label);
+   
+   
+           loadXMLDoc();
+       } else {
+           document.getElementById("warning").innerHTML = "Please select proper option!";
+       }
+   }
+   
+   
+   $(document).on('change', 'input[type="checkbox"]', function () {
+       loadXMLDoc();
+   })
+
+    $(function() {
+      	$('#masterTab a').click(function (e) {
+  			e.preventDefault()
+  			$(this).tab('show')
+		});
+		$('#innerTab a').click(function (e) {
+  			e.preventDefault()
+  			$(this).tab('show')
+		});
+        //$( "#tabs" ).tabs();
+        //$( "#tabs1" ).tabs();
+        $("#cat").select2();
+        $("#item").select2();
+        jQuery("#cat").select2({
+        	placeholder: "Select Category",
+            allowClear: true
+        });
+        jQuery("#item").select2({
+            placeholder: "Select Item"
+        });
+    });
+      
+    	Age = new Array("", "between 20 and 30", "between 30 and 40", "between 40 and 50", "between 50 and 60", "between 60 and 70");
+    	Gender = new Array('', 'male', 'female');
+    	Car = new Array('', 'BMW', 'Audi', 'Hyundai', 'Volkswagen', 'Landrover', 'Sedan');
+    	State = new Array('', 'California', 'Texas', 'Arizona', 'Alaska', 'New York', 'Florida');
+      
+    	populateSelect();
+      
+    	jQuery(function () {
+        	jQuery('#cat').change(function () {
+        	    populateSelect();
+        	});
+    	});
+      
+    	function populateSelect() {
+        	cat = jQuery('#cat').val();
+        	jQuery('#item').html('');
+        	if (cat == 'Age') {
+        	Age.forEach(function (t) {
+            	jQuery('#item').append('<option>' + t + '</option>');
+        	});
+    	}
+		if (cat == 'Gender') {
+        	Gender.forEach(function (t) {
+        	    jQuery('#item').append('<option>' + t + '</option>');
+        	});
+    	}
+    	if (cat == 'Car') {
+    	    Car.forEach(function (t) {
+    	        jQuery('#item').append('<option>' + t + '</option>');
+    	    });
+    	}
+    	if (cat == 'State') {
+        	State.forEach(function (t) {
+            	jQuery('#item').append('<option>' + t + '</option>');
+    		});
+    	}
+	}
+</script>
+</head>
+<body >
+   
+   <div id="top-content" class="hidden">
+      <%= render "menu" %>
+   </div>
+   <!--<div id="top-options-bar">
+      <div id="options-bar-text"> <span id="dataQualitySpan">All</span> of all Supply Sources for <span id="dateRangeSpan">All</span></div>
+   </div>-->
+   <div id="logo" class="img-responsive" alt="Radium One Logo"><%= image_tag("radium_one_site.png", :alt => "Radium One Logo") %></div>
+   
+  	<ul id="masterTab" class="nav nav-tabs">
+  		<li class="active"><a href="#tabs-1" data-toggle="tab">Dashboard</a></li>
+  		<li><a href="#tabs-2" data-toggle="tab">Performance</a></li>
+  		<li><a href="#tabs-3" data-toggle="tab">Audience</a></li>
+	</ul>
+	<div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade in active" id="tabs-1">
+          	<p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>
+      	</div>
+        <div class="tab-pane fade" id="tabs-2">
+        	<div class="row">
+        		<div class="col-md-6 col-md-offset-3">
+          			<table class="table table-bordered table-condensed">
+            			<tr>
+               				<td><dl><dt>Bid_Requests</dt><dd><%= @bids %></dd></dl></td>
+               				<td><dl><dt>Impressions</dt><dd><%= @impr %> </dd></dl></td>
+               				<td><dl><dt>Uniques</dt><dd> <%= @sum2 %>(<%= @secondPieValue1 %>%)</dd></dl></td>
+               				<td><dl><dt>Clicks</dt><dd><%= @sum  %>(<%= @firstPieValue1 %>%)</dd></dl></td>
+               				<td><dl><dt>Conversion</dt><dd><%= @conversions %> </dd></dl></td>
+            			</tr>
+         			</table>
+         		</div>
+         	</div>
+         	<ul id="innerTab" class="nav nav-tabs">
+  				<li class="active"><a href="#tabs-4" data-toggle="tab">Time Analysis</a></li>
+  				<li><a href="#tabs-5" data-toggle="tab">Geo Analysis</a></li>
+  				<li><a href="#tabs-6" data-toggle="tab">Breakdown Analysis</a></li>
+			</ul>
+			<div id="tabs1" class="tab-content">
+        		<div class="tab-pane active" id="tabs-4">
+        			<div class="row">
+                  		<div id="content" class="row"></div>
+               		</div>
+        		</div>
+        		<div class="tab-pane" id="tabs-5">
+        			<table>
+                  		<td id="container5"></td>
+               		</table>
+        		</div>
+        		<div class="tab-pane" id="tabs-6">
+        			<table>
+                  		<td id="container"></td>
+                  		<td id="container1"></td>
+                  		<td id="container2"></td>
+                  		<td id="container3"></td>
+                  		<td id="container4"></td>
+               		</table>
+        		</div>
+        	</div>
+    	</div>
+    	<div class="tab-pane fade" id="tabs-3">
+    	        	<div class="row">
+        		<div class="col-md-6 col-md-offset-3">
+          			<table class="table table-bordered table-condensed">
+            			<tr>
+               				<td><dl><dt>Impressions</dt><dd><%= @impr %> </dd></dl></td>
+               				<td><dl><dt>Uniques</dt><dd> <%= @sum2 %>(<%= @secondPieValue1 %>%)</dd></dl></td>
+            			</tr>
+         			</table>
+         		</div>
+<div class="col-md-6 col-md-offset-3" align="center" width="100%">
+       		<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+Add Audience
+</button>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" border="0">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+   <h4 class="modal-title" id="myModalLabel">New Audience</h4>
+</div>
+<div class="modal-body">
+  		<div align="center">
+  	 		 <div id="myDiv" border="1"> </div>
+    	     <button id="savAudience" type="button" class="btn btn-primary">Save Audience</button>
+    	 </div>    
+
+   <div align="center" width="100%">
+      <h2>	Conditions:</h2>
+      <div style="width: 40%; float: left;">
+         Conditions:
+         <br/>
+         <div id="conditions" style="float:left;" align="left">
+         </div>
+         <div id="warning">
+        </div>
+         </div>
+         <div style="width: 40%; float: right;">
+            <input type="button" class="btn btn-primary" name="Condition 2" value="Add condition+" onclick="showDiv()" />
+            <br/>
+            <div id="condition2" style="display:none; border:1px solid black; background-color:grey; float:left;">
+               <select id="IncExc" style="width: 200px">
+                  <option value="include" selected="selected" id="inc">Include</option>
+                  <option value="exclude" id="exc">Exclude</option>
+               </select>
+               <br/>
+               <select id="cat" style="width: 200px">
+                  <option value="Age">Demographics</option>
+                  <option value="Gender">Gender</option>
+                  <option value="Car">Car Type</option>
+                  <option value="State">State</option>
+               </select>
+               <br/>
+               <select id="item" style="width: 200px">
+               </select>
+               <br/>
+               <button type="button" id="addvalues" class="btn btn-sm">Add</button>
+            </div>
+         </div>
+         <div class="modal-footer">
+
+         </div>
+      </div>
+      <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
+<!-- /.modal --> 
+    	</div>
+    </div>
+    
+    </div>
+</body>
+<script>
+   var dateRange='All';
+   var dataQuality = 'All';
+   var campaignId = 'All';
+   var lineId = 'All';
+   var strategyId = 'All';
+   var creativeId = 'All';
+   var adType = 'All';
+   var advCat = 'All';
+   function detailedChart(dateRange,dataQuality,advCat,campaignId,lineId,strategyId,creativeId,adType) {
+   	var xmlhttp;
+   		if (window.XMLHttpRequest)
+   		 	{// code for IE7+, Firefox, Chrome, Opera, Safari
+    				xmlhttp=new XMLHttpRequest();
+    			}
+   		else
+    			{// code for IE6, IE5
+    				xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    			}
+   		xmlhttp.onreadystatechange=function()
+    			{
+    				if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      				{
+      					var $dom = $(document.createElement("html"));
+							$dom[0].innerHTML = xmlhttp.responseText;
+							var $body = $dom.find("#responseContent");
+      					
+      					
+      					//document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+      					jQuery("#content").html($body);
+      					
+      					
+      				}
+    			}
+   		xmlhttp.open("GET","/slice/index?dateRange=" + dateRange+"&dataQuality="+dataQuality+"&advCat="+advCat+"&campaignId="+campaignId+"&lineId="+lineId+"&strategyId="+strategyId+"&creativeId="+creativeId+"&adType="+adType,true);
+   		xmlhttp.send();
+   		
+   		
+   		//window.alert("/slice/index?dateRange=" + dateRange+"&dataQuality="+dataQuality+"&advCat="+advCat+"&campaignId="+campaignId+"&lineId="+lineId+"&strategyId="+strategyId+"&creativeId="+creativeId+"&adType="+adType);
+   
+   }
+   
+   $(function() {});
+   
+ //  $(document).on('change','.subSubMenuSelect',function(){
+   $(document).bind('change','.subSubMenuSelect',function(){
+   	var dateRangeElem = document.getElementById("dtRange");	
+   	var dataQualityElem = document.getElementById("dataQuality");
+   	var advCatElem = document.getElementById("advCat");
+   	var campaignIdElem = document.getElementById("campaignId");
+   	var lineIdElem = document.getElementById("lineId");
+   	var strategyIdElem = document.getElementById("strategyId");
+   	var creativeIdElem = document.getElementById("creativeId");				
+   	var adTypeElem = document.getElementById("adType");
+   	
+   	if(dateRangeElem) { dateRange = dateRangeElem.value; }
+   	if(dataQualityElem) { dataQuality = dataQualityElem.value; }
+   	if(advCatElem) { advCat = advCatElem.value; }
+   	if(campaignIdElem) { campaignId = campaignIdElem.value; }
+   	if(lineIdElem) { lineId = lineIdElem.value;}
+   	if(strategyIdElem) { strategyId = strategyIdElem.value;}
+   	if(creativeIdElem) { creativeId = creativeIdElem.value;}
+   	if(adTypeElem) { adType = adTypeElem.value;}
+   	
+   	//console.log("dateRange="+dateRange+", advCat="+advCat+", dataQuality="+dataQuality+", campaignId="+campaignId+", lineId="+lineId+", strategyId="+strategyId+", creativeId="+creativeId+", adType="+adType);
+   	
+   	if(dateRange!='All'){
+   		$('#dateRangeSpan').html('Last '+dateRange+' days');
+   	} else {
+   		$('#dateRangeSpan').html(dateRange+' days');
+   	}
+   	if(dataQuality=='1'){
+   		$('#dataQualitySpan').html('Best ');
+   	} else if(dataQuality=='2'){
+   		$('#dataQualitySpan').html('Worst ');
+   	} else {
+   		$('#dataQualitySpan').html('All ');
+   	}
+   	detailedChart(dateRange,dataQuality,advCat,campaignId,lineId,strategyId,creativeId,adType);
+   });
+   
+  
+   $(function () {
+   
+   
+   	detailedChart(dateRange,dataQuality,advCat,campaignId,lineId,strategyId,creativeId,adType);				
+   
+      $('#container').highcharts({
+          chart: {
+              plotBackgroundColor: null,
+              plotBorderWidth: null,
+              plotShadow: false
+          },
+          title: {
+              text: 'Clicks vs Uniques'
+          },
+          tooltip: {
+      	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+          },
+          plotOptions: {
+              pie: {
+                  allowPointSelect: true,
+                  cursor: 'pointer',
+                  dataLabels: {
+                      enabled: true,
+                      color: '#000000',
+                      connectorColor: '#000000',
+                      format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                  }
+              }
+          },
+          series: [{
+              type: 'pie',
+              name: 'Breakdown Analysis',
+       data: [
+       ['clicks', <%= @firstPieValue1 %>],
+        ['Uniques', <%= @secondPieValue1  %>]
+        ] 
+         }]
+          
+         
+   
+      });
+         
+         $('#container1').highcharts({
+          chart: {
+              plotBackgroundColor: null,
+              plotBorderWidth: null,
+              plotShadow: false
+          },
+          title: {
+              text: 'By Supply Sources'
+          },
+          tooltip: {
+      	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+          },
+          plotOptions: {
+              pie: {
+                  allowPointSelect: true,
+                  cursor: 'pointer',
+                  dataLabels: {
+                      enabled: true,
+                      color: '#000000',
+                      connectorColor: '#000000',
+                      format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                  }
+              }
+          },
+          series: [{
+              type: 'pie',
+              name: 'Breakdown Analysis',
+              
+              
+       data: [
+       ['app_nexus', <%= @preAppNexus %>],
+        ['AdX-RTB', <%= @preAdXRTB  %>],
+        ['BRX-RTB', <%= @preBRXRTB %>],
+        ['Rubicon-RTB', <%= @preRubiconRTB %>],
+        ['Open-XRTB', <%= @preOpenXRTB %>],
+        ['rmx', <%= @prermx %>],
+        ['user_match', <%= @preusermatch %>]
+        ] 
+         }]
+           });
+           
+           
+           $('#container2').highcharts({
+          chart: {
+              plotBackgroundColor: null,
+              plotBorderWidth: null,
+              plotShadow: false
+          },
+          title: {
+              text: 'By RTB Category (Mobile, Display)'
+          },
+          tooltip: {
+      	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+          },
+          plotOptions: {
+              pie: {
+                  allowPointSelect: true,
+                  cursor: 'pointer',
+                  dataLabels: {
+                      enabled: true,
+                      color: '#000000',
+                      connectorColor: '#000000',
+                      format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                  }
+              }
+          },
+          series: [{
+              type: 'pie',
+              name: 'Breakdown Analysis',
+              
+              
+       data: [
+       ['Mobile', <%= @preMobile %>],
+        ['Display', <%= @preDisplay  %>]
+        
+        ] 
+         }]
+           });
+           
+           
+           
+               $('#container3').highcharts({
+          chart: {
+              plotBackgroundColor: null,
+              plotBorderWidth: null,
+              plotShadow: false
+          },
+          title: {
+              text: 'By Browser'
+          },
+          tooltip: {
+      	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+          },
+          plotOptions: {
+              pie: {
+                  allowPointSelect: true,
+                  cursor: 'pointer',
+                  dataLabels: {
+                      enabled: true,
+                      color: '#000000',
+                      connectorColor: '#000000',
+                      format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                  }
+              }
+          },
+          series: [{
+              type: 'pie',
+              name: 'Breakdown Analysis',
+              
+              
+       data: [
+       ['AdX-RTB', <%= @preAdXRTB  %>],
+        ['BRX-RTB', <%= @preBRXRTB %>],
+        ['Rubicon-RTB', <%= @preRubiconRTB %>],
+        ['Open-XRTB', <%= @preOpenXRTB %>]
+        
+        ] 
+         }]
+           });   
+           
+           
+            $('#container4').highcharts({
+              title: {
+                  text: 'Uniques Vs Impressions',
+                  x: -20 //center
+              },
+   
+              xAxis: {
+                  categories: ['100', '200', '300', '400', '500', '600',
+                      '700', '800', '900', '1000']
+              },
+              yAxis: {
+                  title: {
+                      text: 'Impressions'
+                  },
+                  plotLines: [{
+                      value: 0,
+                      width: 1,
+                      color: '#808080'
+                  }]
+              },
+             
+              legend: {
+                  layout: 'vertical',
+                  align: 'right',
+                  verticalAlign: 'middle',
+                  borderWidth: 0
+              },
+              series: [{
+                  name: 'Uniques',
+                 // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+                 data:[ <%= @uniques1 %>]
+              }, {
+                  name: 'Impressions',
+                 // data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+                 data: [<%= @impressions1 %>]
+              }]
+          });
+           
+           
+           
+           
+           
+           
+       // initializing geo map data
+           var mapOptions = {
+   						chart : {
+   							renderTo : 'container5',
+   							borderWidth : 1,
+   							zoomType: 'xy'
+   						},
+   						
+   						title : {
+   							text : 'Geo Map Title Goes Here!!!'
+   						},
+   						
+   						subtitle: {
+   							text: 'This Map has sample data'
+   						},
+   						
+   						legend: {
+   							align: 'right',
+   							verticalAlign: 'bottom',
+   							floating: true,
+   							layout: 'vertical',
+   							valueDecimals: 0
+   						},
+   						
+   						tooltip: {
+   							ySuffix: '%'
+   						},
+   	
+   	
+   						series : [{
+   							data : [],
+   				valueRanges: [{
+   								to: 3,
+   								color: 'rgba(19,64,117,0.05)'
+   							}, {
+   								from: 3,
+   								to: 10,
+   								color: 'rgba(19,64,117,0.2)'
+   							}, {
+   								from: 10,
+   								to: 30,
+   								color: 'rgba(19,64,117,0.4)'
+   							}, {
+   								from: 30,
+   								to: 100,
+   								color: 'rgba(19,64,117,0.5)'
+   							}, {
+   								from: 100,
+   								to: 300,
+   								color: 'rgba(19,64,117,0.6)'
+   							}, {
+   								from: 300,
+   								to: 1000,
+   								color: 'rgba(19,64,117,0.8)'
+   							}, {
+   								from: 1000,
+   								color: 'rgba(19,64,117,1)'
+   							}],
+   							
+   							states: {
+   								hover: {
+   									color: '#DD6E28'
+   								}
+   							}
+   						}]
+   					};
+   	  var countryCodes = <%= raw @country_codes.to_json.gsub(/\"/, "'") %>,
+   			countryNames = <%= raw @country_names.to_json.gsub(/\"/, "'") %>,
+   			populationDensities = <%=  @map_values.to_json.gsub(/\"/, "'") %>;
+              
+   
+   	for (var i = 1; i < countryCodes.length; i++) {
+   						if (shapes[countryCodes[i]]) {
+   							mapOptions.series[0].data.push({
+   								y : parseFloat(populationDensities[i]),
+   								name : countryNames[i],
+   								path : shapes[countryCodes[i]],
+   								states: {
+   									hover: {
+   										color: '#0753CE' // orange
+   									}
+   								}
+   							
+   							});
+   						}
+   					}
+               
+   	
+   	var chart5;
+   	//alert(mapOptions.data);
+   	chart5 = new Highcharts.Map(mapOptions);
+   //geomap ends	
+     
+   });
+   
+    window.onload = checkboxClicked();
+   
+   
+   Age = new Array("", "between 20 and 30", "between 30 and 40", "between 40 and 50", "between 50 and 60", "between 60 and 70");
+   Gender = new Array('', 'male', 'female');
+   Car = new Array('', 'BMW', 'Audi', 'Hyundai', 'Volkswagen', 'Landrover', 'Sedan');
+   State = new Array('', 'California', 'Texas', 'Arizona', 'Alaska', 'New York', 'Florida');
+   
+   populateSelect();
+   
+   jQuery(function () {
+   
+       jQuery('#cat').change(function () {
+           populateSelect();
+       });
+   
+   });
+   
+   function populateSelect() {
+       cat = jQuery('#cat').val();
+       jQuery('#item').html('');
+       if (cat == 'Age') {
+           Age.forEach(function (t) {
+               jQuery('#item').append('<option>' + t + '</option>');
+           });
+       }
+       if (cat == 'Gender') {
+           Gender.forEach(function (t) {
+               jQuery('#item').append('<option>' + t + '</option>');
+           });
+       }
+       if (cat == 'Car') {
+           Car.forEach(function (t) {
+               jQuery('#item').append('<option>' + t + '</option>');
+           });
+       }
+       if (cat == 'State') {
+           State.forEach(function (t) {
+               jQuery('#item').append('<option>' + t + '</option>');
+           });
+       }
+   }
+   
+   
+   
+   
+   jQuery("#addvalues").click(function () {
+       valCategory = jQuery('#cat').val();
+       valInclude = jQuery('#IncExc').val();
+       valItem = jQuery('#item').val();
+   
+       showCondition(valCategory, valInclude, valItem);
+   
+   });
+   
+   
+   
+      
+</script>

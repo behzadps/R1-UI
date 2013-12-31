@@ -1,0 +1,256 @@
+<script>
+    var a;
+
+    //var checkbox = document.createElement('input');
+    function checkboxClicked() {
+        loadXMLDoc();
+    }
+
+    function loadXMLDoc() {
+        // gets all the input tags in frm, and their number
+        var inpfields = document.getElementsByTagName('input');
+        var nr_inpfields = inpfields.length;
+
+        var names = [];
+        var ids = [];
+        var values = [];
+        // traverse the inpfields elements, and adds the value of selected (checked) checkbox in selchbox
+        for (var i = 0; i < nr_inpfields; i++) {
+            if (inpfields[i].type == 'checkbox' && inpfields[i].checked == true) {
+                names.push(inpfields[i].name);
+                ids.push(inpfields[i].id);
+                values.push(inpfields[i].value);
+            }
+
+        }
+        var xmlhttp;
+        if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else { // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
+            }
+        }
+ 
+  //      xmlhttp.open("GET", "/segment/index", true);
+//        xmlhttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+       xmlhttp.open("GET","/segment/index?values="+values+"&names="+names+"&ids="+ids,true);
+       xmlhttp.send();
+       // xmlhttp.send("values=" + encodeURIComponent(values.toString()) + "&ids=" + encodeURIComponent(ids.toString()) + "&names=" + encodeURIComponent(names.toString()));
+//        console.log("myObject1=" + encodeURIComponent(values.toString()) + "&myObject2=" + encodeURIComponent(ids.toString()) + "&myObject3=" + encodeURIComponent(names.toString()));
+    }
+
+    function showDiv() {
+
+        document.getElementById('condition2').style.display = "block";
+        jQuery("#cat").select2();
+        jQuery("#item").select2();
+        jQuery("#IncExc").select2();
+        jQuery("#cat").select2({
+            placeholder: "Select Category",
+            allowClear: true
+        });
+        jQuery("#item").select2({
+            placeholder: "Select Item"
+        });
+        jQuery("#IncExc").select2({
+            placeholder: "Select Operation"
+        });
+    }
+
+
+    function showCondition(valCategory, valInclude, valItem) {
+
+
+        if (!valItem == "") {
+            document.getElementById("warning").innerHTML = "";
+            var checkbox = document.createElement('input');
+            checkbox.type = "checkbox";
+            checkbox.checked = true;
+            checkbox.name = valInclude;
+            checkbox.value = valCategory;
+            checkbox.id = valItem;
+            var label = document.createElement('label');
+            label.htmlFor = valItem;
+            if (checkbox.name == 'include') {
+                label.appendChild(document.createTextNode(" + " + valCategory + " = " + valItem));
+            } else {
+                label.appendChild(document.createTextNode(" - " + valCategory + " = " + valItem));
+            }
+            var br = document.createElement("br");
+            conditions.appendChild(br);
+            conditions.appendChild(checkbox);
+            conditions.appendChild(label);
+
+
+            loadXMLDoc();
+        } else {
+            document.getElementById("warning").innerHTML = "Please select proper option!";
+        }
+    }
+
+
+    $(document).on('change', 'input[type="checkbox"]', function () {
+        loadXMLDoc();
+    })
+</script>
+</head>
+
+<body style="margin: 0">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td bgcolor="#333333">
+                <div align="center">
+                    <table border="0" cellpadding="0" cellspacing="0" width="420">
+                        <!-- LOGO AND NAV LINKS -->
+                        <tr>
+                            <td style="padding: 15px 0px 25px 0px;">
+
+                            </td>
+                        </tr>
+                        <!-- HEADLINE + VIDEO -->
+                        <tr>
+                            <td style="padding: 0px 0px 5px 0px">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td width="138" align="left">
+                                            <img alt="Radium1" src="http://learnty.com/r1/images/radium_one_site.png" width="138" height="59" style="display: block; font-family: Arial; color: #ffffff; font-size: 14px;" border="0">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="center" style="padding: 0px 0px 5px 0px; font-size: 39px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; color: #ffffff; letter-spacing:-2px; text-shadow: 2px 2px 2px #000000;">Audience Building</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left" style="padding: 0px 0px 25px 0px; font-size: 14px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: #000000;">
+                                            <table id="myDiv" border="1" width="100%" height="20%" bgcolor="#FFFFF" align="center">
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="center" style="padding: 0px 0px 25px 0px; font-size: 16px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: #000000;">
+                                            <button type="button">Save Current Audience</button>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+                <td bgcolor="#ffffff" style="padding: 20px 15px 15px 15px;">
+                    <div align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="900">
+                            <tr>
+                                <td align="center" style="padding: 0px 0px 10px 0px; font-size: 27px; font-family: Helvetica, Arial, sans-serif; font-weight: bold; color: #323232; letter-spacing:-1px; text-shadow: 1px 1px 1px #888888;">Conditions:</td>
+                            </tr>
+
+                        </table>
+        </tr>
+        <tr>
+            <table align="left">
+                <td style="padding: 15px 0px 25px 370px;">
+                    Conditions:
+                    <div id="conditions" style="float:left;" align="left">
+                        <div id="warning" style="float:left;" align="left" style="font-family: Helvetica, Arial, sans-serif; font-weight: bold; color: red;"></div>
+                </td>
+            </table>
+
+            <table align="right">
+                <td style="padding: 15px 370px 25px 0px;">
+                    <input type="button" name="Condition 2" value="Add condition+" onclick="showDiv()" />
+                    <br/>
+                    <div id="condition2" style="display:none; border:1px solid black; background-color:grey; float:left;">
+
+                        <select id="IncExc" style="width: 200px">
+                            <option value="include" selected="selected" id="inc">Include</option>
+
+                            <option value="exclude" id="exc">Exclude</option>
+                        </select>
+                        <br/>
+                        <select id="cat" style="width: 200px">
+                            <option value="Age">Demographics</option>
+                            <option value="Gender">Gender</option>
+                            <option value="Car">Car Type</option>
+                            <option value="State">State</option>
+                        </select>
+                        <br/>
+                        <select id="item" style="width: 200px">
+                        </select>
+
+                        <br/>
+                        <button type="button" id="addvalues">Add</button>
+                </td>
+
+                </td>
+
+
+
+            </table>
+        </tr>
+        </table>
+        <script>
+            //var checkbox = document.createElement('input');
+            window.onload = checkboxClicked();
+
+
+            Age = new Array("", "between 20 and 30", "between 30 and 40", "between 40 and 50", "between 50 and 60", "between 60 and 70");
+            Gender = new Array('', 'male', 'female');
+            Car = new Array('', 'BMW', 'Audi', 'Hyundai', 'Volkswagen', 'Landrover', 'Sedan');
+            State = new Array('', 'California', 'Texas', 'Arizona', 'Alaska', 'New York', 'Florida');
+
+            populateSelect();
+
+            jQuery(function () {
+
+                jQuery('#cat').change(function () {
+                    populateSelect();
+                });
+
+            });
+
+            function populateSelect() {
+                cat = jQuery('#cat').val();
+                jQuery('#item').html('');
+                if (cat == 'Age') {
+                    Age.forEach(function (t) {
+                        jQuery('#item').append('<option>' + t + '</option>');
+                    });
+                }
+                if (cat == 'Gender') {
+                    Gender.forEach(function (t) {
+                        jQuery('#item').append('<option>' + t + '</option>');
+                    });
+                }
+                if (cat == 'Car') {
+                    Car.forEach(function (t) {
+                        jQuery('#item').append('<option>' + t + '</option>');
+                    });
+                }
+                if (cat == 'State') {
+                    State.forEach(function (t) {
+                        jQuery('#item').append('<option>' + t + '</option>');
+                    });
+                }
+            }
+
+
+
+
+            jQuery("#addvalues").click(function () {
+                valCategory = jQuery('#cat').val();
+                valInclude = jQuery('#IncExc').val();
+                valItem = jQuery('#item').val();
+
+                showCondition(valCategory, valInclude, valItem);
+
+            });
+        </script>

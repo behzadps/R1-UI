@@ -1,0 +1,114 @@
+<div id="header">
+	<div id="logo"><%= image_tag("radium_one_site.png", :alt => "Radium One Logo") %></div>
+	<div id="menu">
+		<ul>
+			<li id="mainMenu1" onmouseover="displaySubMenu(this);">Dashboard</li>
+			<li id="mainMenu2" onmouseover="displaySubMenu(this);">My Platform</li>
+			<li id="mainMenu3" onmouseover="displaySubMenu(this);">Price Discovery</li>
+			<li id="mainMenu4" onmouseover="displaySubMenu(this);">Market Reports</li>
+		</ul>
+	</div>
+	<div id="rightside-menu">
+		<ul>
+			<li>DSP User</li>
+		</ul>
+	</div>
+</div>
+
+
+<div id="submenu">
+	<ul></ul>
+</div>
+<div class="subSubMenu">
+	<ul><ul>
+</div>
+
+<script>
+		function displaySubMenu(elem) {			
+			$('.subSubMenu').css('display','none');
+			var id=$(elem).attr('id');
+			$('#menu ul li').css('background','#000');
+			$('#'+id).css('background','#0000FF');
+			//console.log("Id: "+id);
+			if(id=="mainMenu1"){
+				$('#submenu ul').html('');
+				$('#submenu').css('display','none');
+			} else if(id=="mainMenu2"){
+				$('#submenu ul').html('<li id="subMenu21" onmouseover="displaySubSubMenu(this);">Demand Sources</li><li id="subMenu22" onmouseover="displaySubSubMenu(this);">DSupply Sources</li>');
+				$('#submenu').css('display','block');
+			} else if(id=="mainMenu3"){			
+				$('#submenu ul').html('<li id="subMenu31" onmouseover="displaySubSubMenu(this);">Price Explorer</li><li id="subMenu32" onmouseover="displaySubSubMenu(this);">Day Part Map</li>');
+				$('#submenu').css('display','block');
+			} else if(id=="mainMenu4"){			
+				$('#submenu ul').html('<li id="subMenu41" onmouseover="displaySubSubMenu(this);">Publisher Category</li><li id="subMenu42" onmouseover="displaySubSubMenu(this);">Ad Category</li><li id="subMenu43" onmouseover="displaySubSubMenu(this);">Supply Source</li><li id="subMenu44" onmouseover="displaySubSubMenu(this);">Geography</li><li id="subMenu45" onmouseover="displaySubSubMenu(this);">Ad Unit</li>');
+				$('#submenu').css('display','block');
+				//console.log("1: "+$('#submenu ul').html());
+			}
+		}
+	
+		function displaySubSubMenu(elem) {
+			var listOfviews = '<li><div id="labelSubSubMenu">View</div><select id="view" class="subSubMenuSelect"><option>Market Index</option><option>Market Index1</option></select></li>';
+			var advertisers = '<li><div id="labelSubSubMenu">Advertiser Category</div><select id="advCat" class="subSubMenuSelect"><option value="All">All</option><option value="0">RadiumOne</option><option value="34">Random1</option><option value="43">Random2</option><option value="51">Random3</option><option value="65">Random4</option><option value="99">Random5</option><option value="112">Random6</option></select></li>';
+			var dataRanges = '<li><div id="labelSubSubMenu">Data Range</div><select id="dtRange" class="subSubMenuSelect"><option value="All">All</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option></select></li>';
+			var dataQualities = '<li><div id="labelSubSubMenu">Data Quality</div><select id="dataQuality" class="subSubMenuSelect"><option value="All">All</option><option value="1">Best</option><option value="2">Worst</option></select></li>';
+			var publishers = '<li><div id="labelSubSubMenu">Publisher Category</div><input type="search" value="A" id="publisherCat"></input></li>';
+			var supplySources = '<li><div id="labelSubSubMenu">Supply Source</div><input type="search" value="" id="supSrc"></input></li>';
+			var statesList = '<li><div id="labelSubSubMenu">State</div><input type="search" value="" id="state"></input></li>';
+			var campaignIds = '<li><label id="labelSubSubMenu">Campaign Id</label><select id="campaignId" class="subSubMenuSelect"><option value="All">All</option><option value="0">0</option><option value="34">34</option><option value="43">43</option><option value="51">51</option><option value="65">65</option><option value="99">99</option><option value="112">112</option><option value="1572">1572</option><option value="1722">1722</option></select></li>';
+			var lineIds = '<li><label id="labelSubSubMenu">Line Id</label><select id="lineId" class="subSubMenuSelect"><option value="All">All</option><option value="0">0</option><option value="5757">5757</option><option value="7913">7913</option><option value="9384">9384</option><option value="9860">9860</option><option value="9863">9863</option><option value="9865">9865</option><option value="9866">9866</option><option value="9909">9909</option><option value="9913">9913</option><option value="9915">9915</option><option value="9920">9920</option><option value="10049">10049</option><option value="10188">10188</option><option value="10191">10191</option><option value="10193">10193</option><option value="10195">10195</option><option value="10197">10197</option><option value="10686">10686</option><option value="10688">10688</option><option value="10772">10772</option></select></li>';
+			var strategyIds = '<li><label id="labelSubSubMenu">Strategy Id</label><select id="strategyId" class="subSubMenuSelect"><option value="All">All</option><option value="0">0</option><option value="44432">44432</option><option value="62143">62143</option><option value="62150">62150</option><option value="62152">62152</option><option value="62153">62153</option><option value="79209">79209</option><option value="79210">79210</option><option value="79212">79212</option><option value="79213">79213</option><option value="79214">79214</option><option value="79216">79216</option><option value="79217">79217</option><option value="79218">79218</option><option value="79220">79220</option><option value="79221">79221</option><option value="79222">79222</option><option value="79223">79223</option><option value="79224">79224</option><option value="79226">79226</option><option value="79227">79227</option><option value="79228">79228</option><option value="79229">79229</option><option value="79230">79230</option><option value="79236">79236</option><option value="79237">79237</option><option value="79238">79238</option><option value="79241">79241</option><option value="79242">79242</option<option value="79245">79245</option></select></li>';
+			var creativeIds = '<li><label id="labelSubSubMenu">Creative Id</label><select id="creativeId" class="subSubMenuSelect"><option value="All">All</option><option value="-1">-1</option><option value="308945">308945</option><option value="316439">316439</option><option value="316440">316440</option><option value="316441">316441</option><option value="316442">316442</option><option value="316443">316443</option><option value="316444">316444</option><option value="314705">314705</option><option value="314707">314707</option><option value="314757">314757</option><option value="314758">314758</option><option value="314713">314713</option><option value="314714">314714</option><option value="314715">314715</option><option value="314670">314670</option><option value="314671">314671</option><option value="314672">314672</option><option value="314711">314711</option><option value="314679">314679</option><option value="316452">316452</option><option value="309307">309307</option><option value="309308">309308</option><option value="309310">309310</option><option value="309311">309311</option><option value="309312">309312</option><option value="309313">309313</option><option value="316898">316898</option><option value="316899">316899</option><option value="316900">316900</option></select></li>';
+			var adType = '<li><label id="labelSubSubMenu">Ad Type</label><select id="adType" class="subSubMenuSelect"><option value="All">All</option><option value=""></option><option value="IN_STREAM_VIDEO">IN_STREAM_VIDEO</option><option value="ONLINE_DISPLAY">ONLINE_DISPLAY</option><option value="MOBILE_APP_DISPLAY">MOBILE_APP_DISPLAY</option></select></li>';
+			
+			var subSubMenuData31 = listOfviews + dataRanges + publishers + advertisers + supplySources + statesList + adType;
+			var subSubMenuData43 = listOfviews + dataRanges + publishers + advertisers + statesList + adType;
+			var subSubMenuData44 = dataRanges + publishers + advertisers + supplySources + statesList + adType;
+			var subSubMenuData45 = dataRanges + dataQualities + advertisers + campaignIds + lineIds + strategyIds + creativeIds + adType;
+			var subSubMenuData = dataRanges + publishers + advertisers + supplySources + creativeIds + statesList + adType;
+			
+			var id=$(elem).attr('id');	
+			
+			if(id=="subMenu21"){
+				$('.subSubMenu ul').html('');
+				$('.subSubMenu ul').html(subSubMenuData);
+				$('.subSubMenu').css('display','block');
+			} else if(id=="subMenu22"){			
+				$('.subSubMenu ul').html('');
+				$('.subSubMenu ul').html(subSubMenuData);
+				$('.subSubMenu').css('display','block');
+			}else if(id=="subMenu31"){
+				$('.subSubMenu ul').html('');
+				$('.subSubMenu ul').html(subSubMenuData31);
+				$('.subSubMenu').css('display','block');
+			}else if(id=="subMenu32"){
+				$('.subSubMenu ul').html('');
+				$('.subSubMenu ul').html(subSubMenuData);
+				$('.subSubMenu').css('display','block');
+			}else if(id=="subMenu41"){
+				$('.subSubMenu ul').html('');
+				$('.subSubMenu ul').html(subSubMenuData);
+				$('.subSubMenu').css('display','block');
+			}else if(id=="subMenu42"){
+				$('.subSubMenu ul').html('');
+				$('.subSubMenu ul').html(subSubMenuData);
+				$('.subSubMenu').css('display','block');
+			}else if(id=="subMenu43"){
+				$('.subSubMenu ul').html('');
+				$('.subSubMenu ul').html(subSubMenuData43);
+				$('.subSubMenu').css('display','block');
+			}else if(id=="subMenu44"){
+				$('.subSubMenu ul').html('');
+				$('.subSubMenu ul').html(subSubMenuData44);
+				$('.subSubMenu').css('display','block');
+			}else if(id=="subMenu45"){
+				$('.subSubMenu ul').html('');
+				$('.subSubMenu ul').html(subSubMenuData45);
+				$('.subSubMenu').css('display','block');
+			}
+			$('#publisherCat').attr("disabled", "true");  
+			//$('#advCat').attr("disabled", "true");  
+			$('#supSrc').attr("disabled", "true");  
+			$('#state').attr("disabled", "true");  
+			//$('#adUnit').attr("disabled", "true");  
+		}
+	</script>
